@@ -10,12 +10,12 @@ import { useStateContext } from '../contexts/ContextProvider'
 
 const Sidebar = () => {
 
-  const {activeMenu, setActiveMenu, screenSize} = useStateContext();
+  const { activeMenu, setActiveMenu, screenSize, currentColor } = useStateContext();
 
   const handleCloseSidebar = () => {
 
     // if on mobile device, then close sidebar when you select something
-    if(activeMenu && screenSize <= 900){
+    if (activeMenu && screenSize <= 900) {
       setActiveMenu(false)
     }
   }
@@ -39,8 +39,9 @@ const Sidebar = () => {
               </Link>
 
               <TooltipComponent content='Menu' position='BottomCenter'>
-                <button onClick={() => {setActiveMenu((prev)=> !prev)}}
-                 className='text-xl rounded-full p-3 hover:bg-light-gray mt-4 block md:hidden'
+                <button onClick={() => { setActiveMenu((prev) => !prev) }}
+                  style={{ color: currentColor }}
+                  className='text-xl rounded-full p-3 hover:bg-light-gray mt-4 block md:hidden'
                 >
                   <MdOutlineCancel />
                 </button>
@@ -49,29 +50,32 @@ const Sidebar = () => {
 
             <div className='mt-10'>
               {links.map((item) => (
-                  <div key={item.title}>
-                    <p className='text-gray-400 m-3 mt-4 uppercase'>
+                <div key={item.title}>
+                  <p className='text-gray-400 m-3 mt-4 uppercase'>
                     {item.title}
-                    </p>
+                  </p>
 
-                    {item.links.map((link) => (
-                      <NavLink 
+                  {item.links.map((link) => (
+                    <NavLink
                       to={`${link.name}`}
                       key={link.name}
                       onClick={handleCloseSidebar}
-                      className={({isActive}) =>
-                      isActive ? activeLink : normalLink
+                      className={({ isActive }) =>
+                        isActive ? activeLink : normalLink
                       }
-                      >
+                      style={({ isActive }) => ({
+                        backgroundColor: isActive ? currentColor : '',
+                      })}
+                    >
 
-                        {link.icon}
-                        <span className='capitalize'>{link.name}</span>
+                      {link.icon}
+                      <span className='capitalize'>{link.name}</span>
 
 
-                      </NavLink>
-                    ))}
+                    </NavLink>
+                  ))}
 
-                  </div>
+                </div>
               ))}
 
             </div>
